@@ -1,0 +1,1 @@
+[2014-09-27 12:31:23.691] [INFO] admin-log - [32m[/Users/ericnguyen/Work/TestGame2/game-server/node_modules/pomelo/lib/master/master.js] [39m{"action":"execute","moduleId":"__console__","method":"clientHandler","msg":{"signal":"kill","ids":[],"clientId":"pomelo_terminal_1411846283621","username":"admin"}}
