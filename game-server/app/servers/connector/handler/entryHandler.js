@@ -15,8 +15,41 @@ var Handler = function(app) {
  * @return {Void}
  */
 Handler.prototype.entry = function(msg, session, next) {
-  next(null, {code: 200, msg: 'game server is ok.'});
+	var self = this;
+	var rid = msg.rid;
+	var uid = msg.username + "*" + rid;
+	var sessionService = this.app.get('sessionService');
+
+	if(!!sessionService.getByUid(uid)) {
+		next(null, {
+			code: 500,
+			error: "Duplicate user"
+		});
+		return;
+	}
+
+	session.bind(uid);
+	session.set('rid', rid); //I have no idea what the fuck this does
+	session.push('rid', function(err) {
+		if(err) {
+			console.error("Setting rid failed, bro. wat do");
+		}
+	})
+
+	session.on('closed', onUserLeave.bind(null, self.app));
+
+	next(null, {code: 200, msg: JSON.stringify(msg)});
+
+  // next to return current room state
 };
+
+var onUserLeave = function(app, session) {
+	if(!session || !session.uid) {
+		return;
+	}
+
+	// do shit with cleaning user
+}
 
 /**
  * Publish route for mqtt connector.
